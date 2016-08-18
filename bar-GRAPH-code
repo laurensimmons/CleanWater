@@ -1,0 +1,55 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import csv
+#from numpy import genfromtext 
+
+water_in= open('/Users/laurensimmons/Documents/BridgeUp/Datavis/DrinkingWaterProj/waterdata_2015.csv')
+cleanwater=list (csv.reader(water_in))
+
+def getColumn(waterdata, column):
+    results = csv.reader(open(waterdata))
+    return [result[column] for result in results]
+countries = getColumn('waterdata_2015.csv' ,0)
+N = 24 #this where i need to change 
+UrbanMeans = map(float, getColumn("waterdata_2015.csv",2))#data 
+
+
+
+
+ind = np.arange(N)
+#print("UrbanMeans length" + str(len(UrbanMeans)))
+#print("ind is this: " + str(ind))
+width = 0.35       # the width of the bars
+
+fig, ax = plt.subplots()
+rects1 = ax.bar(ind, UrbanMeans, width, color='#66ccff')
+
+RuralMeans = map(float , getColumn("waterdata_2015.csv",3))
+#print(RuralMeans)# data needs to be changed
+
+rects2 = ax.bar(ind + width, RuralMeans, width, color='#0066ff')
+
+# add some text for labels, title and axes ticks
+ax.set_xlabel('Countries')
+ax.set_ylabel('Percent of Improved Drinking Water')
+ax.set_title('Does Urban or Rural Have Better Drinking Water?')
+ax.set_xticks(ind + width)
+ax.set_xticklabels(countries)
+
+
+ax.legend((rects1[0], rects2[0]), ('Urban', 'Rural'))
+
+
+def autolabel(rects):
+    # attach some text labels
+    for rect in rects:
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,
+                '%d' % int(height),
+                ha='center', va='bottom')
+
+#autolabel(rects1)
+#autolabel(rects2)
+
+
+plt.show()
